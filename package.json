@@ -1,6 +1,6 @@
 {
   "name": "kue-move",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Move kue jobs to different states from the command-line",
   "main": "index.js",
   "scripts": {
