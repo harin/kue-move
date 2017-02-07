@@ -11,5 +11,6 @@
   "dependencies": {
     "commander": "^2.9.0",
     "kue": "^0.11.5"
-  }
+  },
+  "bin": "./kue-move"
 }
