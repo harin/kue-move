@@ -1,16 +1,31 @@
 {
   "name": "kue-move",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Move kue jobs to different states from the command-line",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Harin Sanghirun",
   "license": "ISC",
   "dependencies": {
     "commander": "^2.9.0",
     "kue": "^0.11.5"
   },
-  "bin": "./kue-move"
+  "bin": "./kue-move",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harinsa/kue-move.git"
+  },
+  "engines": { "node" : ">=6" },
+  "keywords": [
+    "kue",
+    "kuecli",
+    "kue-cli",
+    "queue",
+    "node",
+    "utility",
+    "commandline",
+    "command-line"
+  ]
 }
