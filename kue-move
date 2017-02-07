@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+const program = require('commander')
+const kue = require('kue')
+const async = require('async')
+const queue = kue.createQueue()
+
+const log = (message) => {
+  if (program.verbose) console.log('[kue-move]', message)
+}
+
+const logError = (message) => {
+   console.error(`[kue-move] Error: ${message}`)
+}
+
+const stateRegex = /^(inactive|active|failed|completed)$/i
+const validateState = (val, message) => {
+  if (val == null) {
+    logError(message)
+    process.exit(1)
+  }
+  if (!val.match(stateRegex)) {
+    logError(`Invalid state \`${val}\``)
+    process.exit(1)
+  }
+  return val
+}
+
+program
+  .version('0.0.1')
+  .option('-f, --from <fromState>', 'From state')
+  .option('-t, --to <toState>', 'To State')
+  .option('-j, --job [jobType]', 'Job Type Condition', null)
+  .option('-a, --age [jobAge]', 'Job Age Condition', null)
+  .option('-v, --verbose', '', false)
+
+program.parse(process.argv)
+
+const { from, to } = program
+const jobType = program.job
+const jobAge = program.age
+
+validateState(from, '`from` argument is required')
+validateState(to, '`to` argument is required')
+
+const performAction = (id, callback) => {
+  kue.Job.get(id, (error, job) => {
+    if (error) callback(error)
+    if (jobType && job.type !== jobType) return callback()
+    log(`sending ${job.data.title} id=${job.id} to \`${to}\``)
+    job[to](callback)
+  })
+}
+
+queue[from]((error, ids) => {
+  async.each(ids, performAction, (error) => {
+    if (error) {
+      logError(error)
+      process.exit(1)
+    }
+    process.exit()
+  })
+})

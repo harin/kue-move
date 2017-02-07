@@ -1,0 +1,15 @@
+{
+  "name": "kue-move",
+  "version": "0.0.1",
+  "description": "Move kue jobs to different states from the commandline",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "kue": "^0.11.5"
+  }
+}
