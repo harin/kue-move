@@ -2,7 +2,9 @@
 const program = require('commander')
 const kue = require('kue')
 const async = require('async')
-const queue = kue.createQueue()
+const queue = kue.createQueue({
+  redis: process.env.REDIS_URL
+})
 
 const log = (message) => {
   if (program.verbose) console.log('[kue-move]', message)
@@ -12,13 +14,14 @@ const logError = (message) => {
    console.error(`[kue-move] Error: ${message}`)
 }
 
-const stateRegex = /^(inactive|active|failed|completed)$/i
-const validateState = (val, message) => {
+const stateRegex = /^(inactive|active|failed|complete)$/i
+const toRegex = /^(inactive|active|failed|complete|remove)$/
+const validateState = (val, regex, message) => {
   if (val == null) {
     logError(message)
     process.exit(1)
   }
-  if (!val.match(stateRegex)) {
+  if (!val.match(regex)) {
     logError(`Invalid state \`${val}\``)
     process.exit(1)
   }
@@ -39,8 +42,8 @@ const { from, to } = program
 const jobType = program.job
 const jobAge = program.age
 
-validateState(from, '`from` argument is required')
-validateState(to, '`to` argument is required')
+validateState(from, stateRegex, '`from` argument is required')
+validateState(to, toRegex, '`to` argument is required')
 
 const performAction = (id, callback) => {
   kue.Job.get(id, (error, job) => {
