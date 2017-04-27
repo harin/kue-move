@@ -29,7 +29,7 @@ const validateState = (val, regex, message) => {
 }
 
 program
-  .version('0.0.3')
+  .version('0.0.5')
   .option('-f, --from <fromState>', 'From state')
   .option('-t, --to <toState>', 'To State')
   .option('-j, --job [jobType]', 'Job Type Condition', null)
